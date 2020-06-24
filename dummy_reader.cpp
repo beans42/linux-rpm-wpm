@@ -54,6 +54,7 @@ void read_bytes(uint8_t* buffer, const uintptr_t address, const size_t length) {
 	process_vm_readv(process_id, &local, 1, &remote, 1, 0);
 }
 
+//modified version of https://github.com/learn-more/findpattern-bench/blob/4ff34fc58cf094356f100bab301d81679e3e4c84/patterns/learn_more.h#L15
 uintptr_t find_pattern(uint8_t* start, size_t length, const char* pattern) {
 	const char* pat = pattern;
 	uintptr_t first_match = 0;
