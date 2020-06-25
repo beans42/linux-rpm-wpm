@@ -55,16 +55,15 @@ void read_bytes(uint8_t* buffer, const uintptr_t address, const size_t length) {
 }
 
 //modified version of https://github.com/learn-more/findpattern-bench/blob/4ff34fc58cf094356f100bab301d81679e3e4c84/patterns/learn_more.h#L15
-uintptr_t find_pattern(uint8_t* start, size_t length, const char* pattern) {
+uintptr_t find_pattern(uint8_t* start, const size_t length, const char* pattern) {
 	const char* pat = pattern;
-	uintptr_t first_match = 0;
+	uint8_t* first_match = 0;
 	for (auto current_byte = start; current_byte < start + length; ++current_byte) {
-		if (!*pat) return first_match;
 		if (*pat == '?' || *current_byte == strtoul(pat, NULL, 16)) {
-			if (!first_match) first_match = (uintptr_t)current_byte;
-			if (!pat[2]) return first_match;
+			if (!first_match) first_match = current_byte;
+			if (!pat[2]) return (uintptr_t)first_match;
 			pat += *(uint16_t*)pat == 16191 /*??*/ || *pat != '?' ? 3 : 2;
-		} else { pat = pattern; first_match = 0; }
+		} else if (first_match) { current_byte = first_match; pat = pattern; first_match = 0; }
 	} return 0x0;
 }
 
